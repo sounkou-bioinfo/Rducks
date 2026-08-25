@@ -14,7 +14,7 @@ permissions: read-all
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-    timeout-minutes: 35
+    timeout-minutes: ${{ matrix.config.timeout }}
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
@@ -22,16 +22,18 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
+          - {os: macos-latest,   r: 'release', timeout: 35}
+          - {os: windows-latest, r: 'release', timeout: 35}
           # Exercise the native build on the GitHub-hosted Windows ARM64 runner.
-          - {os: windows-11-arm, r: 'release'}
+          # DuckDB has no matching cached ARM64 binary, so dependency setup can
+          # take substantially longer than the regular check matrix jobs.
+          - {os: windows-11-arm, r: 'release', timeout: 90}
           # R-devel coverage lives in fedora-cran-check.yaml, where pak can use
           # the CRAN-like Fedora/R-devel binary resolver for heavy dependencies
           # such as duckdb. Ubuntu R-devel builds duckdb from source and times
           # out before package checking starts.
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: '4.3'}
+          - {os: ubuntu-latest,   r: 'release', timeout: 35}
+          - {os: ubuntu-latest,   r: '4.3', timeout: 35}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
