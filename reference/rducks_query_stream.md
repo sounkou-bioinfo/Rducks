@@ -38,7 +38,7 @@ stream closes on `$close()` or `rducks_release(con)`.
 # \donttest{
 db <- duckdb::dbConnect(duckdb::duckdb(config = list(allow_unsigned_extensions = "true")))
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/RtmpqCR7r7/duckdb
+#> ℹ /tmp/Rtmp7iTOSm/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
