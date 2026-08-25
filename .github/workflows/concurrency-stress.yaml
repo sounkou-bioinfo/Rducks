@@ -1,6 +1,8 @@
 name: Concurrency stress
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       duckdb_threads:
@@ -11,8 +13,6 @@ on:
         description: "NNG worker count for multiprocess tests"
         required: false
         default: "2"
-  schedule:
-    - cron: "41 4 * * 2"
 
 jobs:
   concurrency-stress:
@@ -62,8 +62,8 @@ jobs:
           lib <- readLines(".rducks-test-lib", warn = FALSE)
           .libPaths(c(lib, .libPaths()))
           library(Rducks)
-          tinytest::run_test_file("inst/tinytest/test_duckdb_runtime_concurrent_queue.R")
-          tinytest::run_test_file("inst/tinytest/test_zzzy_duckdb_runtime_nng_transports.R")
+          tinytest::run_test_file("inst/tinytest/test_ipc_roundtrip.R")
+          tinytest::run_test_file("inst/tinytest/test_ipc_external_malformed.R")
         shell: Rscript {0}
 
       - name: Clean concurrency stress library
